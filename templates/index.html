@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Scanner</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let barcodeData = "";
+
+            document.addEventListener('keydown', async (event) => {
+                if (event.key === 'Enter') {
+                    let response = await fetch('/scan', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({barcode: 'enter'})
+                    });
+                    let result = await response.json();
+                    alert(Barcode: ${result.barcode});
+                    barcodeData = "";
+                } else {
+                    barcodeData += event.key;
+                    await fetch('/scan', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({barcode: event.key})
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Barcode Scanner</h1>
+    <p>Kiritmalaringizni kutmoqda...</p>
+</body>
+</html>
